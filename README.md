@@ -1,3 +1,62 @@
+# 🇮🇳 BIS Sahayak AI
+
+## AI-Powered Knowledge Assistant for the Bureau of Indian Standards
+
+BIS Sahayak AI is a domain-specific AI assistant designed to help citizens, manufacturers, MSMEs, students, and businesses access BIS-related information through a simple conversational interface.
+
+The system uses **Retrieval-Augmented Generation (RAG)** to retrieve relevant information from a curated BIS document knowledge base and generate grounded answers using a local Large Language Model.
+
+---
+
+## 🎯 Problem Statement
+
+Finding information related to Indian Standards, certification, licensing, regulations, and BIS procedures can be difficult because users often need to search through lengthy and technical documents.
+
+Users may need to:
+
+- Search through large PDF documents
+- Understand technical terminology
+- Find relevant sections and clauses
+- Identify certification requirements
+- Understand BIS licensing procedures
+- Cross-check information across documents
+
+Traditional keyword search may also fail when users describe their questions differently from the terminology used in official documents.
+
+BIS Sahayak AI addresses this problem through semantic retrieval and AI-powered question answering.
+
+---
+
+## 💡 Proposed Solution
+
+BIS Sahayak AI allows users to ask questions about BIS information using natural language.
+
+The system retrieves relevant information from BIS documents before generating the answer.
+
+### Core Workflow
+
+```text
+User Question
+      ↓
+Question Embedding
+      ↓
+Semantic Search
+      ↓
+ChromaDB
+      ↓
+Relevant BIS Document Chunks
+      ↓
+Context Construction
+      ↓
+Llama 3.2 3B
+      ↓
+Grounded Answer
+      ↓
+Source References
+```
+
+---
+
 ## 🧠 RAG Pipeline
 
 BIS Sahayak AI follows a Retrieval-Augmented Generation (RAG) architecture:
@@ -108,54 +167,99 @@ The knowledge base currently contains **1,434 processed chunks across 9 BIS PDF 
           Source / Page References
                      ↓
                  React UI
+```
+
+---
+
+## 🚀 Running the Project
+
+### Prerequisites
+
+- Python 3.9–3.11
+- Node.js and npm
+- Ollama
+- Git
 
 ### 1. Clone the Repository
 
 ```bash
 git clone https://github.com/vichu2k7/bis-ai-assistant.git
 cd bis-ai-assistant
+```
 
-2. Install Python Dependencies
+### 2. Install Python Dependencies
+
+```bash
 pip install -r requirements.txt
+```
 
-3. Start Ollama
+### 3. Start Ollama
+
 Make sure Ollama is installed and running.
-Pull the required Llama model:
+
+Pull the required model:
+
+```bash
 ollama pull llama3.2:3b
+```
 
-4. Start the Backend
+### 4. Start the Backend
+
 From the project root:
-python -m uvicorn backend.main:app --reload
 
-The FastAPI backend will start locally.
-5. Start the Frontend
+```bash
+python -m uvicorn backend.main:app --reload
+```
+
+### 5. Start the Frontend
+
 Open a new terminal:
+
+```bash
 cd frontend
 npm install
 npm run dev
+```
 
 The frontend will be available at:
-http://localhost:5173/
 
-6. Open the Application
-Open the URL shown by Vite in your browser:
+```text
 http://localhost:5173/
+```
 
-🎥 Demo
-Watch the complete BIS Sahayak AI demonstration:
-YouTube Demo:
+---
+
+## 🎥 Demo
+
+### YouTube Demo
+
 https://youtu.be/AEbf1ZiBF_g?si=uy9gqqQH4BCyLo5G
-🔐 Grounding & Safety
+
+---
+
+## 🔐 Grounding & Safety
+
 BIS Sahayak AI is designed to reduce unsupported responses by grounding generation in retrieved BIS documents.
+
 If relevant information cannot be found in the available knowledge base, the system can indicate that the information is unavailable rather than intentionally generating an unsupported BIS answer.
+
 The current implementation is an MVP and should not be treated as a replacement for official BIS legal, regulatory, or certification guidance.
-⚠️ Current Limitations
+
+---
+
+## ⚠️ Current Limitations
+
 - The MVP uses a curated BIS document collection rather than the complete BIS knowledge ecosystem.
 - English conversational interaction is currently supported.
 - Production deployment would require stronger authentication, authorization, monitoring, encryption, and controlled document-update mechanisms.
 - The current knowledge base requires controlled re-ingestion when documents are updated.
-🔮 Future Scope
+
+---
+
+## 🔮 Future Scope
+
 The architecture can be extended with:
+
 - Automated BIS document monitoring
 - Document version control
 - Change detection and re-indexing
@@ -165,9 +269,16 @@ The architecture can be extended with:
 - Clause-level citations
 - Secure production deployment
 - Knowledge-gap detection and official-source fallback
-🏆 Project Status
-BIS Sahayak AI — Hackathon MVP
+
+---
+
+## 🏆 Project Status
+
+**BIS Sahayak AI — Hackathon MVP**
+
 The current version demonstrates a complete end-to-end RAG workflow:
+
+```text
 BIS Documents
       ↓
 Document Processing
@@ -185,10 +296,14 @@ Llama 3.2 3B
 Grounded BIS Answer
       ↓
 Source References
+```
 
-The MVP provides a foundation for a future production-grade BIS intelligence platform.
-🔗 Project Links
-GitHub Repository:
+---
+
+## 🔗 Project Links
+
+**GitHub Repository:**  
 https://github.com/vichu2k7/bis-ai-assistant
-YouTube Demo:
+
+**YouTube Demo:**  
 https://youtu.be/AEbf1ZiBF_g?si=uy9gqqQH4BCyLo5G
