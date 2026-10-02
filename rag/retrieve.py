@@ -31,23 +31,25 @@ collection = client.get_collection(
 
 def retrieve(question, k=5):
 
+    question = question.strip()
+
+    if question.lower() in [
+        "what is bis?",
+        "what is bis",
+        "tell me about bis",
+        "what does bis mean?",
+        "what does bis mean"
+    ]:
+        question = "What is the Bureau of Indian Standards?"
+
     question_embedding = model.encode(
         question
     ).tolist()
 
     results = collection.query(
-
-        query_embeddings=[
-            question_embedding
-        ],
-
+        query_embeddings=[question_embedding],
         n_results=k,
-
-        include=[
-            "documents",
-            "metadatas",
-            "distances"
-        ]
+        include=["documents", "metadatas", "distances"]
     )
 
     return results

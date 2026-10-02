@@ -1,6 +1,6 @@
-import chromadb
-from sentence_transformers import SentenceTransformer
+
 import requests
+from rag.retrieve import retrieve
 
 
 # --------------------------------
@@ -9,28 +9,13 @@ import requests
 
 print("Loading embedding model...")
 
-embedding_model = SentenceTransformer(
-    "all-MiniLM-L6-v2",
-    local_files_only=True
-)
+
 
 
 # --------------------------------
 # 2. Connect to ChromaDB
 # --------------------------------
 
-client = chromadb.PersistentClient(
-    path="data/chroma"
-)
-
-
-# --------------------------------
-# 3. Get BIS collection
-# --------------------------------
-
-collection = client.get_collection(
-    "bis_documents"
-)
 
 
 # --------------------------------
@@ -55,31 +40,12 @@ THRESHOLD = 1.30
 def ask_bis(question: str):
 
     # --------------------------------
-    # Convert question to embedding
+    # Retrieve relevant BIS documents
     # --------------------------------
 
-    query_embedding = embedding_model.encode(
-        question
-    ).tolist()
-
-
-    # --------------------------------
-    # Search ChromaDB
-    # --------------------------------
-
-    results = collection.query(
-
-        query_embeddings=[
-            query_embedding
-        ],
-
-        n_results=TOP_K,
-
-        include=[
-            "documents",
-            "metadatas",
-            "distances"
-        ]
+    results = retrieve(
+        question,
+        k=TOP_K
     )
 
 

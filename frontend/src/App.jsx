@@ -1,10 +1,11 @@
-import { useEffect, useState } from "react";
+import { useState, useEffect, useRef } from "react";
+import "./App.css";
 import {
   Search, Home, MessageSquare, BookOpen, Award, FlaskConical,
   Star, Bookmark, ChevronRight, ThumbsUp, ThumbsDown, Upload,
   Database, Shield, Activity, FileText, Globe, Menu, X,
   ChevronDown, ExternalLink, Check, AlertCircle, Clock,
-  Filter, MapPin, Phone, ArrowRight, RefreshCw, Bell,
+  Filter, MapPin, Phone, ArrowRight, ShieldCheck, RefreshCw, Bell,
   BarChart2, Users, Settings, LogOut, HelpCircle, Layers
 } from "lucide-react";
 
@@ -116,109 +117,212 @@ function ConfidencePill({ score, sources }) {
 // ── HEADER ────────────────────────────────────────────────────────────────────
 function Header({ screen, setScreen }) {
   const [langOpen, setLangOpen] = useState(false);
-  const langs = ["English", "हिंदी", "தமிழ்", "తెలుగు", "मराठी", "বাংলা"];
+
   const navItems = [
     { id: "home", label: "Home" },
+    { id: "chat", label: "Ask BIS" },
     { id: "standards", label: "Standards" },
-    { id: "labs", label: "Laboratories" },
-    { id: "services", label: "Services" },
+    { id: "services", label: "Help" },
   ];
 
   return (
-    <header style={{
-      background: C.navyDark,
-      borderBottom: `3px solid ${C.red}`,
-      position: "sticky", top: 0, zIndex: 100,
-    }}>
-      <div style={{
-        maxWidth: 1280, margin: "0 auto",
-        padding: "0 24px",
-        display: "flex", alignItems: "center", gap: 32, height: 60,
-      }}>
-        {/* Logo */}
-        <button onClick={() => setScreen("home")} style={{
-          display: "flex", alignItems: "center", gap: 10,
-          background: "none", border: "none", cursor: "pointer",
-          flexShrink: 0,
-        }}>
-          <div style={{
-            width: 34, height: 34,
-            background: C.red,
-            borderRadius: 4,
-            display: "flex", alignItems: "center", justifyContent: "center",
-          }}>
-            <span style={{ color: "white", fontSize: 13, fontWeight: 800 }}>BIS</span>
+    <header
+      style={{
+        position: "sticky",
+        top: 0,
+        zIndex: 100,
+        background: "rgba(255,255,255,0.96)",
+        backdropFilter: "blur(10px)",
+        borderBottom: "1px solid #E2E8F0",
+      }}
+    >
+      
+
+      <div
+        style={{
+          maxWidth: 1180,
+          height: 68,
+          margin: "0 auto",
+          padding: "0 24px",
+          display: "flex",
+          alignItems: "center",
+          gap: 32,
+        }}
+      >
+        {/* LOGO */}
+        <button
+          onClick={() => setScreen("home")}
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: 11,
+            border: "none",
+            background: "transparent",
+            padding: 0,
+            cursor: "pointer",
+            flexShrink: 0,
+          }}
+        >
+          <div
+            style={{
+              width: 38,
+              height: 38,
+              borderRadius: 6,
+              background: "#C5221F",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              color: "#fff",
+              fontSize: 13,
+              fontWeight: 800,
+            }}
+          >
+            BIS
           </div>
-          <div>
-            <div style={{ color: "white", fontWeight: 700, fontSize: 14, lineHeight: 1.2 }}>
-              BIS Intelligent Assistant
+
+          <div style={{ textAlign: "left" }}>
+            <div
+              style={{
+                color: "#0F2942",
+                fontSize: 15,
+                fontWeight: 800,
+                lineHeight: 1.15,
+              }}
+            >
+              BIS Sahayak AI
             </div>
-            <div style={{ color: "#93A8C9", fontSize: 10, lineHeight: 1 }}>
+
+            <div
+              style={{
+                color: "#718298",
+                fontSize: 10,
+                marginTop: 3,
+              }}
+            >
               Bureau of Indian Standards
             </div>
           </div>
         </button>
 
-        {/* Nav */}
-        <nav style={{ display: "flex", gap: 4, flex: 1 }}>
-          {navItems.map(n => (
-            <button key={n.id} onClick={() => setScreen(n.id)} style={{
-              background: screen === n.id ? "rgba(255,255,255,.1)" : "none",
-              border: "none", cursor: "pointer",
-              color: screen === n.id ? "white" : "#93A8C9",
-              fontSize: 13, fontWeight: screen === n.id ? 600 : 400,
-              padding: "6px 12px", borderRadius: 4,
-              transition: "all .15s",
-            }}>{n.label}</button>
+        {/* NAVIGATION */}
+        <nav
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: 4,
+            flex: 1,
+          }}
+        >
+          {navItems.map((item) => (
+            <button
+              key={item.id}
+              onClick={() => setScreen(item.id)}
+              style={{
+                border: "none",
+                borderRadius: 7,
+                background:
+                  screen === item.id ? "#EEF2FF" : "transparent",
+                color:
+                  screen === item.id ? "#4059AA" : "#536479",
+                padding: "9px 13px",
+                fontSize: 13,
+                fontWeight: screen === item.id ? 700 : 500,
+                cursor: "pointer",
+              }}
+            >
+              {item.label}
+            </button>
           ))}
         </nav>
 
-        {/* Right side */}
-        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-          {/* Language */}
+        {/* RIGHT SIDE */}
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: 9,
+          }}
+        >
+          {/* LANGUAGE */}
           <div style={{ position: "relative" }}>
-            <button onClick={() => setLangOpen(!langOpen)} style={{
-              display: "flex", alignItems: "center", gap: 4,
-              background: "rgba(255,255,255,.08)", border: "1px solid rgba(255,255,255,.15)",
-              borderRadius: 4, padding: "5px 10px",
-              color: "#B8CDE8", fontSize: 12, cursor: "pointer",
-            }}>
-              <Globe size={13} />
+            <button
+              onClick={() => setLangOpen(!langOpen)}
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: 5,
+                border: "1px solid #D7E0EC",
+                borderRadius: 7,
+                background: "#FFFFFF",
+                color: "#536479",
+                padding: "8px 11px",
+                fontSize: 12,
+                cursor: "pointer",
+              }}
+            >
+              <Globe size={14} />
               English
-              <ChevronDown size={11} />
+              <ChevronDown size={12} />
             </button>
+
             {langOpen && (
-              <div style={{
-                position: "absolute", right: 0, top: "100%", marginTop: 4,
-                background: C.card, border: `1px solid ${C.border}`,
-                borderRadius: 6, boxShadow: "0 8px 24px rgba(0,0,0,.12)",
-                minWidth: 140, zIndex: 200,
-              }}>
-                {langs.map(l => (
-                  <button key={l} onClick={() => setLangOpen(false)} style={{
-                    display: "block", width: "100%", textAlign: "left",
-                    padding: "8px 14px", fontSize: 13, color: C.text,
-                    background: "none", border: "none", cursor: "pointer",
-                  }}>{l}</button>
-                ))}
+              <div
+                style={{
+                  position: "absolute",
+                  right: 0,
+                  top: "calc(100% + 7px)",
+                  minWidth: 145,
+                  background: "#FFFFFF",
+                  border: "1px solid #E2E8F0",
+                  borderRadius: 9,
+                  padding: 5,
+                  boxShadow: "0 12px 30px rgba(15,41,66,0.12)",
+                }}
+              >
+                {["English", "हिंदी", "தமிழ்", "తెలుగు", "मराठी", "বাংলা"].map(
+                  (lang) => (
+                    <button
+                      key={lang}
+                      onClick={() => setLangOpen(false)}
+                      style={{
+                        display: "block",
+                        width: "100%",
+                        textAlign: "left",
+                        border: "none",
+                        background: "transparent",
+                        borderRadius: 6,
+                        padding: "9px 11px",
+                        color: "#536479",
+                        fontSize: 13,
+                        cursor: "pointer",
+                      }}
+                    >
+                      {lang}
+                    </button>
+                  )
+                )}
               </div>
             )}
           </div>
 
-          <button onClick={() => setScreen("admin")} style={{
-            background: "rgba(255,255,255,.08)",
-            border: "1px solid rgba(255,255,255,.15)",
-            borderRadius: 4, padding: "5px 10px",
-            color: "#B8CDE8", fontSize: 12, cursor: "pointer",
-          }}>Admin</button>
-
-          <button onClick={() => setScreen("chat")} style={{
-            background: C.red, border: "none",
-            borderRadius: 5, padding: "6px 14px",
-            color: "white", fontSize: 13, fontWeight: 600,
-            cursor: "pointer", display: "flex", alignItems: "center", gap: 6,
-          }}>
-            <MessageSquare size={13} />
+          {/* ASK BIS */}
+          <button
+            onClick={() => setScreen("chat")}
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: 7,
+              border: "none",
+              borderRadius: 7,
+              background: "#C5221F",
+              color: "#FFFFFF",
+              padding: "9px 15px",
+              fontSize: 13,
+              fontWeight: 700,
+              cursor: "pointer",
+            }}
+          >
+            <MessageSquare size={14} />
             Ask BIS
           </button>
         </div>
@@ -230,193 +334,284 @@ function Header({ screen, setScreen }) {
 // ── SCREEN 1: HOME ────────────────────────────────────────────────────────────
 function HomeScreen({ setScreen, setChatQuery }) {
   const [query, setQuery] = useState("");
-  const examples = [
-    "Which BIS standard applies to my product?",
-    "How do I get BIS certification?",
-    "Which laboratory can test my product?",
-    "What are the hallmarking requirements for gold?",
-    "How to renew a BIS licence?",
-    "What does IS 9000 cover?",
-  ];
-  const services = [
-    { icon: Award, label: "Product Certification", desc: "ISI mark & licence" },
-    { icon: Star, label: "Hallmarking", desc: "Gold, silver, platinum" },
-    { icon: FlaskConical, label: "Laboratory Recognition", desc: "NABL & BIS labs" },
-    { icon: BookOpen, label: "Standards", desc: "IS catalogue & access" },
-    { icon: Users, label: "Consumer Services", desc: "Grievances & awareness" },
-    { icon: Shield, label: "Conformity Assessment", desc: "Testing & inspection" },
-  ];
 
-  const handleAsk = (q) => {
-    const text = q || query;
-    if (!text.trim()) return;
+  const handleAsk = (question = query) => {
+    const text = question.trim();
+
+    if (!text) {
+      setScreen("chat");
+      return;
+    }
+
     setChatQuery(text);
     setScreen("chat");
   };
 
+  const quickAccess = [
+    {
+      icon: Search,
+      title: "Search Standards",
+      description: "Find Indian Standards (IS) and related documents.",
+      color: "#2563EB",
+      bg: "#EFF6FF",
+      action: () => setScreen("standards"),
+    },
+    {
+      icon: MessageSquare,
+      title: "Ask BIS Sahayak",
+      description: "Get instant, accurate answers with source citation.",
+      color: "#059669",
+      bg: "#ECFDF5",
+      action: () => setScreen("chat"),
+    },
+    {
+      icon: FileText,
+      title: "Browse Documents",
+      description: "Explore standards and certification guidance.",
+      color: "#7C3AED",
+      bg: "#F5F3FF",
+      action: () => setScreen("services"),
+    },
+    {
+      icon: ShieldCheck,
+      title: "Check Certification",
+      description: "Verify product certification and compliance information.",
+      color: "#EA580C",
+      bg: "#FFF7ED",
+      action: () => setScreen("services"),
+    },
+  ];
+
+  const popularStandards = [
+    { code: "IS 302-1", title: "Household electrical appliances" },
+    { code: "IS 16046", title: "Rechargeable batteries" },
+    { code: "IS 13252", title: "Information technology equipment" },
+    { code: "IS 14543", title: "Packaged drinking water" },
+  ];
+
   return (
-    <div style={{ background: C.surface, minHeight: "calc(100vh - 63px)" }}>
-      {/* Hero */}
-      <div style={{
-        background: C.navyDark,
-        padding: "72px 24px 80px",
-        textAlign: "center",
-      }}>
-        <div style={{
-          display: "inline-block",
-          background: "rgba(200,16,46,.15)",
-          border: "1px solid rgba(200,16,46,.3)",
-          borderRadius: 20,
-          padding: "4px 14px",
-          color: "#F4A7B3",
-          fontSize: 11, fontWeight: 600, letterSpacing: "0.08em",
-          marginBottom: 20,
-        }}>
-          OFFICIAL BIS AI KNOWLEDGE ASSISTANT
-        </div>
+    <div className="dashboard-home">
 
-        <h1 style={{
-          color: "white", fontSize: 40, fontWeight: 800,
-          lineHeight: 1.2, margin: "0 0 12px",
-          letterSpacing: "-0.02em",
-        }}>
-          Understand Indian Standards.<br />
-          <span style={{ color: "#7FA8DB" }}>Get reliable BIS guidance.</span>
-        </h1>
-        <p style={{
-          color: "#93A8C9", fontSize: 16, margin: "0 auto 40px",
-          maxWidth: 520, lineHeight: 1.6,
-        }}>
-          Ask in plain language about standards, certification, hallmarking,
-          testing labs, or any BIS service.
-        </p>
+      {/* MAIN CONTENT */}
+      
+      <main className="dashboard-content">
 
-        {/* Search bar */}
-        <div style={{
-          maxWidth: 680, margin: "0 auto",
-          background: C.card,
-          borderRadius: 10,
-          border: `2px solid rgba(255,255,255,.15)`,
-          display: "flex", alignItems: "center",
-          boxShadow: "0 8px 32px rgba(0,0,0,.3)",
-          overflow: "hidden",
-        }}>
-          <Search size={20} style={{ marginLeft: 18, color: C.textDim, flexShrink: 0 }} />
-          <input
-            value={query}
-            onChange={e => setQuery(e.target.value)}
-            onKeyDown={e => e.key === "Enter" && handleAsk()}
-            placeholder="Ask about Indian Standards, certification, hallmarking, testing, or BIS services..."
-            style={{
-              flex: 1, border: "none", outline: "none",
-              padding: "18px 14px",
-              fontSize: 15, color: C.text,
-              background: "transparent",
-            }}
-          />
-          <button onClick={() => handleAsk()} style={{
-            background: C.red,
-            border: "none",
-            padding: "12px 24px",
-            color: "white", fontSize: 14, fontWeight: 600,
-            cursor: "pointer", margin: 6, borderRadius: 6,
-            display: "flex", alignItems: "center", gap: 6,
-          }}>
-            <ArrowRight size={16} />
-            Ask
-          </button>
-        </div>
+        {/* WELCOME */}
+        <section className="welcome-card">
 
-        {/* Trust */}
-        <div style={{
-          display: "flex", alignItems: "center", gap: 6,
-          justifyContent: "center", marginTop: 16,
-          color: "#6B8CAE", fontSize: 12,
-        }}>
-          <Shield size={13} />
-          Answers are based on authorised BIS knowledge sources with citations.
-        </div>
-      </div>
+          <div className="welcome-copy">
+            <div className="welcome-eyebrow">
+              OFFICIAL BIS CITIZEN & INDUSTRY ASSISTANT
+            </div>
 
-      {/* Examples */}
-      <div style={{
-        maxWidth: 900, margin: "0 auto",
-        padding: "40px 24px 0",
-      }}>
-        <SectionLabel>Common Questions</SectionLabel>
-        <div style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))",
-          gap: 10,
-        }}>
-          {examples.map((ex, i) => (
-            <button key={i} onClick={() => handleAsk(ex)} style={{
-              background: C.card,
-              border: `1px solid ${C.border}`,
-              borderRadius: 8,
-              padding: "12px 16px",
-              display: "flex", alignItems: "center", gap: 10,
-              cursor: "pointer", textAlign: "left",
-              transition: "border-color .15s, box-shadow .15s",
-              color: C.text,
-            }}>
-              <div style={{
-                width: 28, height: 28, borderRadius: "50%",
-                background: C.navyLight,
-                display: "flex", alignItems: "center", justifyContent: "center",
-                flexShrink: 0,
-              }}>
-                <MessageSquare size={13} style={{ color: C.navy }} />
+            <h1>
+  Your BIS Assistant, Simplified
+  <span>Welcome to BIS Sahayak AI</span>
+</h1>
+
+            <p>
+              Your intelligent assistant for searching Indian Standards,
+              getting trusted answers and finding BIS services.
+            </p>
+
+            <div className="welcome-trust">
+              <div>
+                <ShieldCheck size={15} />
+                <span>Trusted BIS Information</span>
               </div>
-              <span style={{ fontSize: 13, lineHeight: 1.4 }}>{ex}</span>
-            </button>
-          ))}
-        </div>
-      </div>
 
-      {/* Quick services */}
-      <div style={{ maxWidth: 900, margin: "0 auto", padding: "40px 24px" }}>
-        <SectionLabel>BIS Services</SectionLabel>
-        <div style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fill, minmax(140px, 1fr))",
-          gap: 10,
-        }}>
-          {services.map((s, i) => (
-            <button key={i} onClick={() => setScreen("services")} style={{
-              background: C.card,
-              border: `1px solid ${C.border}`,
-              borderRadius: 8, padding: "18px 14px",
-              cursor: "pointer", textAlign: "center",
-              display: "flex", flexDirection: "column",
-              alignItems: "center", gap: 8,
-            }}>
-              <div style={{
-                width: 38, height: 38, borderRadius: 8,
-                background: C.navyLight,
-                display: "flex", alignItems: "center", justifyContent: "center",
-              }}>
-                <s.icon size={18} style={{ color: C.navy }} />
+              <div>
+                <Check size={15} />
+                <span>Source-backed Answers</span>
               </div>
-              <div style={{ fontSize: 12, fontWeight: 600, color: C.text }}>{s.label}</div>
-              <div style={{ fontSize: 11, color: C.textDim }}>{s.desc}</div>
-            </button>
-          ))}
-        </div>
-      </div>
 
-      {/* Footer strip */}
-      <div style={{
-        borderTop: `1px solid ${C.border}`,
-        background: C.card,
-        padding: "16px 24px",
-        textAlign: "center",
-      }}>
-        <span style={{ fontSize: 12, color: C.textDim }}>
-          Bureau of Indian Standards, Ministry of Consumer Affairs, Food & Public Distribution, Government of India
-          &nbsp;·&nbsp; This assistant provides guidance only — refer to official BIS publications for compliance.
-        </span>
-      </div>
+              <div>
+                <Activity size={15} />
+                <span>Powered by RAG Technology</span>
+              </div>
+            </div>
+          </div>
+
+          <div className="welcome-visual">
+            <div className="ai-orbit">
+              <div className="ai-core">
+                <ShieldCheck size={42} />
+              </div>
+
+              <span className="orbit-dot dot-one"></span>
+              <span className="orbit-dot dot-two"></span>
+              <span className="orbit-dot dot-three"></span>
+            </div>
+
+            <div className="visual-label">
+              BIS Sahayak AI
+            </div>
+          </div>
+
+        </section>
+ {/* ASK BIS */}
+        <section className="ask-dashboard-card">
+
+          <div className="ask-dashboard-header">
+            <div className="ask-ai-icon">
+              <MessageSquare size={20} />
+            </div>
+
+            <div>
+              <h2>Chat with BIS Sahayak AI</h2>
+              <p>
+                Ask anything about BIS standards, certification,
+                licences or guidelines.
+              </p>
+            </div>
+          </div>
+
+          <div className="dashboard-search">
+
+            <Search size={19} />
+
+            <input
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  handleAsk();
+                }
+              }}
+              placeholder="Type your BIS question..."
+            />
+
+            <button onClick={() => handleAsk()}>
+              Ask BIS
+              <ArrowRight size={17} />
+            </button>
+
+          </div>
+
+          <div className="suggestion-row">
+
+            {[
+              "What is BIS certification?",
+              "How do I get a BIS licence?",
+              "How does hallmarking work?",
+            ].map((question) => (
+              <button
+                key={question}
+                onClick={() => handleAsk(question)}
+              >
+                {question}
+              </button>
+            ))}
+
+          </div>
+
+        </section>
+
+        {/* QUICK ACCESS */}
+        <section className="dashboard-section">
+
+          <div className="dashboard-section-heading">
+            <div>
+              <h2>Quick Access</h2>
+              <p>Find what you need, faster.</p>
+            </div>
+          </div>
+
+          <div className="quick-grid">
+
+            {quickAccess.map((item) => {
+              const Icon = item.icon;
+
+              return (
+                <button
+                  key={item.title}
+                  className="quick-card"
+                  onClick={item.action}
+                >
+                  <div
+                    className="quick-icon"
+                    style={{
+                      color: item.color,
+                      background: item.bg,
+                    }}
+                  >
+                    <Icon size={21} />
+                  </div>
+
+                  <div className="quick-card-content">
+                    <h3>{item.title}</h3>
+                    <p>{item.description}</p>
+                  </div>
+
+                  <ChevronRight
+                    size={18}
+                    className="quick-arrow"
+                  />
+                </button>
+              );
+            })}
+
+          </div>
+
+        </section>
+
+
+       
+
+
+        {/* POPULAR STANDARDS */}
+        <section className="dashboard-section">
+
+          <div className="dashboard-section-heading standards-heading">
+
+            <div>
+              <h2>Popular Standards</h2>
+              <p>Frequently searched Indian Standards</p>
+            </div>
+
+            <button onClick={() => setScreen("standards")}>
+              View All
+              <ChevronRight size={15} />
+            </button>
+
+          </div>
+
+          <div className="standards-grid">
+
+            {popularStandards.map((standard) => (
+              <div
+                key={standard.code}
+                className="standard-mini-card"
+              >
+                <div className="standard-mini-icon">
+                  <BookOpen size={18} />
+                </div>
+
+                <div>
+                  <strong>{standard.code}</strong>
+                  <span>{standard.title}</span>
+                </div>
+              </div>
+            ))}
+
+          </div>
+
+        </section>
+
+
+        {/* FOOTER NOTE */}
+        <div className="dashboard-disclaimer">
+          <Shield size={14} />
+
+          <span>
+            BIS Sahayak AI provides information grounded in the
+            available BIS knowledge base. Always verify compliance
+            decisions with official BIS publications.
+          </span>
+        </div>
+
+      </main>
+
     </div>
   );
 }
@@ -492,164 +687,274 @@ const SAMPLE_CHAT = [
 
 function ChatMessage({ msg }) {
   const [feedback, setFeedback] = useState(null);
+
+  // USER MESSAGE
   if (msg.role === "user") {
     return (
-      <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: 20 }}>
-        <div style={{
-          background: C.navy, color: "white",
-          borderRadius: "12px 12px 3px 12px",
-          padding: "12px 16px", maxWidth: "65%",
-          fontSize: 14, lineHeight: 1.6,
-        }}>
+      <div className="chat-user-row">
+        <div className="chat-user-bubble">
           {msg.content}
         </div>
       </div>
     );
   }
+
   const c = msg.content;
-  return (
-    <div style={{ marginBottom: 28 }}>
-      {/* AI bubble */}
-      <div style={{
-        background: C.card,
-        border: `1px solid ${C.border}`,
-        borderRadius: "3px 12px 12px 12px",
-        padding: "18px 20px",
-        maxWidth: "85%",
-      }}>
-        {/* Summary / Loading */}
-        {msg.loading ? (
-          <div style={{
-            display: "flex", alignItems: "center", gap: 10,
-            fontSize: 13, color: C.textMid,
-            marginBottom: 4,
-          }}>
-            <div style={{
-              width: 16, height: 16, borderRadius: "50%",
-              border: `2px solid ${C.navyLight}`,
-              borderTopColor: C.navy,
-              animation: "spin 1s linear infinite",
-              flexShrink: 0,
-            }} />
-            {c.summary}
-          </div>
-        ) : (
-          <p style={{
-            fontSize: 14, lineHeight: 1.7, color: C.text,
-            margin: "0 0 16px",
-            fontWeight: 500,
-          }}>{c.summary}</p>
-        )}
 
-        {/* Sections */}
-        {(c.sections || []).map((s, i) => (
-          <div key={i} style={{
-            borderLeft: `3px solid ${C.navyLight}`,
-            paddingLeft: 12, marginBottom: 12,
-          }}>
-            <div style={{
-              fontSize: 11, fontWeight: 700, color: C.navy,
-              textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: 3,
-            }}>{s.heading}</div>
-            <p style={{ fontSize: 13, color: C.textMid, margin: 0, lineHeight: 1.6 }}>
-              {s.body}
-            </p>
-          </div>
-        ))}
+  // LOADING STATE
+  if (msg.loading) {
+    return (
+      <div className="chat-ai-row">
+        <div className="chat-ai-card loading-card">
 
-        {/* Applicable Standards */}
-        {(c.standards || []).length > 0 && (
-          <div style={{
-            background: C.navyLight,
-            borderRadius: 6,
-            padding: "10px 14px",
-            marginTop: 14, marginBottom: 14,
-          }}>
-            <div style={{ fontSize: 11, fontWeight: 700, color: C.navy,
-              letterSpacing: "0.06em", marginBottom: 8 }}>
-              APPLICABLE STANDARDS
+          <div className="ai-title-row">
+            <div className="ai-avatar">
+              <ShieldCheck size={19} />
             </div>
-            {(c.standards || []).map((s, i) => (
-              <div key={i} style={{
-                display: "flex", alignItems: "center", gap: 10,
-                marginBottom: i < (c.standards || []).length - 1 ? 6 : 0,
-              }}>
-                <ISBadge code={s.code} />
-                <span style={{ fontSize: 12, color: C.text }}>{s.title}</span>
-              </div>
-            ))}
-          </div>
-        )}
 
-        {/* Sources */}
-        <div style={{
-          borderTop: `1px solid ${C.border}`,
-          paddingTop: 12, marginTop: 14,
-        }}>
-          <div style={{ fontSize: 10, fontWeight: 700, color: C.textDim,
-            letterSpacing: "0.1em", marginBottom: 8 }}>SOURCES</div>
-          {(c.sources || []).map((s, i) => (
-            <div key={i} style={{
-              display: "flex", alignItems: "flex-start", gap: 8,
-              marginBottom: 6,
-            }}>
-              <div style={{
-                background: "#E8EDF3",
-                color: C.textMid,
-                fontSize: 9, fontWeight: 700,
-                padding: "2px 6px", borderRadius: 3,
-                letterSpacing: "0.05em", flexShrink: 0, marginTop: 1,
-              }}>{s.type.toUpperCase()}</div>
-              <div style={{ flex: 1 }}>
-                <span style={{ fontSize: 12, color: C.text, fontWeight: 500 }}>{s.label}</span>
-                {s.clause && (
-                  <span style={{ fontSize: 11, color: C.textDim }}> · {s.clause}</span>
-                )}
+            <div>
+              <div className="ai-name">
+                BIS Sahayak AI
               </div>
-              <button style={{
-                background: "none", border: `1px solid ${C.border}`,
-                borderRadius: 4, padding: "2px 8px",
-                fontSize: 10, color: C.link, cursor: "pointer",
-                display: "flex", alignItems: "center", gap: 3, flexShrink: 0,
-              }}>
-                <ExternalLink size={9} />
-                View
-              </button>
+              <div className="ai-status">
+                Official BIS knowledge assistant
+              </div>
             </div>
-          ))}
-        </div>
+          </div>
 
-        {/* Footer */}
-        <div style={{
-          display: "flex", alignItems: "center", justifyContent: "space-between",
-          marginTop: 14, flexWrap: "wrap", gap: 8,
-        }}>
-          <ConfidencePill score={c.confidence} sources={c.sourceCount} />
-          <div style={{ display: "flex", gap: 6 }}>
-            <span style={{ fontSize: 11, color: C.textDim, alignSelf: "center" }}>
-              Was this helpful?
+          <div className="loading-content">
+
+            <div className="loading-spinner"></div>
+
+            <div>
+              <div className="loading-title">
+                Finding official BIS information...
+              </div>
+
+              <div className="loading-subtitle">
+                Searching the BIS knowledge base and checking relevant sources
+              </div>
+            </div>
+
+          </div>
+
+          <div className="loading-steps">
+            <span className="loading-step active">
+              <Check size={12} />
+              Understanding question
             </span>
-            <button onClick={() => setFeedback("yes")} style={{
-              background: feedback === "yes" ? C.greenLight : "none",
-              border: `1px solid ${feedback === "yes" ? C.green : C.border}`,
-              borderRadius: 4, padding: "4px 8px",
-              cursor: "pointer", color: feedback === "yes" ? C.green : C.textDim,
-              display: "flex", alignItems: "center", gap: 3, fontSize: 11,
-            }}>
-              <ThumbsUp size={11} /> Helpful
-            </button>
-            <button onClick={() => setFeedback("no")} style={{
-              background: feedback === "no" ? C.redLight : "none",
-              border: `1px solid ${feedback === "no" ? C.red : C.border}`,
-              borderRadius: 4, padding: "4px 8px",
-              cursor: "pointer", color: feedback === "no" ? C.red : C.textDim,
-              display: "flex", alignItems: "center", gap: 3, fontSize: 11,
-            }}>
-              <ThumbsDown size={11} /> Not helpful
-            </button>
+
+            <span className="loading-step active">
+              <Search size={12} />
+              Searching BIS sources
+            </span>
+
+            <span className="loading-step">
+              <FileText size={12} />
+              Preparing answer
+            </span>
           </div>
+
         </div>
       </div>
+    );
+  }
+
+  return (
+    <div className="chat-ai-row">
+
+      <div className="chat-ai-card">
+
+        {/* AI HEADER */}
+        <div className="ai-title-row">
+
+          <div className="ai-avatar">
+            <ShieldCheck size={19} />
+          </div>
+
+          <div className="ai-title-info">
+            <div className="ai-name">
+              BIS Sahayak AI
+            </div>
+
+            <div className="ai-status">
+              Answer grounded in available BIS documents
+            </div>
+          </div>
+
+          <div className="official-pill">
+            <Check size={12} />
+            Source grounded
+          </div>
+
+        </div>
+
+
+        {/* MAIN ANSWER */}
+        <div className="answer-heading">
+          Answer
+        </div>
+
+        <div className="answer-text">
+          {c.summary}
+        </div>
+
+
+        {/* SECTIONS */}
+        {(c.sections || []).length > 0 && (
+          <div className="answer-sections">
+
+            {c.sections.map((s, i) => (
+              <div className="answer-section" key={i}>
+
+                <div className="answer-section-number">
+                  {String(i + 1).padStart(2, "0")}
+                </div>
+
+                <div>
+                  <h3>{s.heading}</h3>
+                  <p>{s.body}</p>
+                </div>
+
+              </div>
+            ))}
+
+          </div>
+        )}
+
+
+        {/* STANDARDS */}
+        {(c.standards || []).length > 0 && (
+          <div className="standards-box">
+
+            <div className="box-title">
+              <BookOpen size={15} />
+              Applicable Standards
+            </div>
+
+            {c.standards.map((s, i) => (
+              <div className="standard-row" key={i}>
+                <ISBadge code={s.code} />
+                <span>{s.title}</span>
+              </div>
+            ))}
+
+          </div>
+        )}
+
+
+        {/* SOURCES */}
+        {(c.sources || []).length > 0 && (
+          <div className="sources-box">
+
+            <div className="sources-header">
+              <div>
+                <div className="sources-title">
+                  <FileText size={15} />
+                  Official Sources
+                </div>
+
+                <div className="sources-subtitle">
+                  Information used to generate this answer
+                </div>
+              </div>
+
+              <span className="source-count">
+                {c.sourceCount} source{c.sourceCount !== 1 ? "s" : ""}
+              </span>
+            </div>
+
+            <div className="source-list">
+
+              {c.sources.map((s, i) => (
+                <div className="source-card" key={i}>
+
+                  <div className="source-number">
+                    {i + 1}
+                  </div>
+
+                  <div className="source-main">
+
+                    <div className="source-name">
+                      {s.label}
+                    </div>
+
+                    {s.clause && (
+                      <div className="source-page">
+                        {s.clause}
+                      </div>
+                    )}
+
+                  </div>
+
+                  <span className="source-type">
+                    {s.type}
+                  </span>
+
+                </div>
+              ))}
+
+            </div>
+
+          </div>
+        )}
+
+
+        {/* NO SOURCES */}
+        {(c.sources || []).length === 0 && !msg.loading && (
+          <div className="no-source-box">
+            <AlertCircle size={18} />
+
+            <div>
+              <strong>
+                No reliable BIS source found
+              </strong>
+
+              <p>
+                I could not find this information in the available
+                BIS knowledge base. I won't guess or invent an answer.
+              </p>
+            </div>
+          </div>
+        )}
+
+
+        {/* FOOTER */}
+        <div className="answer-footer">
+
+          <ConfidencePill
+            score={c.confidence}
+            sources={c.sourceCount}
+          />
+
+          <div className="feedback-area">
+
+            <span>
+              Was this helpful?
+            </span>
+
+            <button
+              className={feedback === "yes" ? "feedback-active-good" : ""}
+              onClick={() => setFeedback("yes")}
+            >
+              <ThumbsUp size={13} />
+              Helpful
+            </button>
+
+            <button
+              className={feedback === "no" ? "feedback-active-bad" : ""}
+              onClick={() => setFeedback("no")}
+            >
+              <ThumbsDown size={13} />
+              Not helpful
+            </button>
+
+          </div>
+
+        </div>
+
+      </div>
+
     </div>
   );
 }
@@ -657,15 +962,14 @@ function ChatMessage({ msg }) {
 function ChatScreen({ setScreen, initialQuery }) {
   const [input, setInput] = useState("");
   const [messages, setMessages] = useState([]);
+  const initialQuerySent = useRef(false);
   const navItems = [
     { id: "home",       icon: Home,          label: "Home" },
     { id: "chat",       icon: MessageSquare, label: "AI Assistant" },
     { id: "standards",  icon: BookOpen,       label: "Standards" },
     { id: "services",   icon: Award,          label: "Certification" },
     { id: "labs",       icon: FlaskConical,   label: "Laboratories" },
-    { id: "hallmark",   icon: Star,           label: "Hallmarking" },
-    { id: "consumer",   icon: Users,          label: "Consumer Services" },
-    { id: "saved",      icon: Bookmark,       label: "Saved Queries" },
+    
   ];
 
   const sendQuestion = async (question) => {
@@ -720,11 +1024,11 @@ function ChatScreen({ setScreen, initialQuery }) {
 
       // Convert FastAPI source objects into the format
       // expected by the existing BIS UI.
-      const sources = (data.sources || []).map((source) => ({
-        label: source.source || "BIS Document",
-        clause: `Page ${source.page ?? "Unknown"} — ${source.chunk ?? "Unknown"}`,
-        type: "BIS SOURCE"
-      }));
+      const sources = (data.sources || []).slice(0, 3).map((source) => ({
+  label: source.source || "BIS Document",
+  clause: `Page ${source.page ?? "Unknown"} — ${source.chunk ?? "Unknown"}`,
+  type: "BIS SOURCE"
+}));
 
       const answerContent = {
         summary: data.answer || "No answer was returned by the BIS knowledge base.",
@@ -798,10 +1102,12 @@ function ChatScreen({ setScreen, initialQuery }) {
   // If the user asks a question from the Home screen,
   // automatically send that question to the real backend.
   useEffect(() => {
-    if (!initialQuery || !initialQuery.trim()) return;
+  if (!initialQuery || !initialQuery.trim()) return;
+  if (initialQuerySent.current) return;
 
-    sendQuestion(initialQuery);
-  }, [initialQuery]);
+  initialQuerySent.current = true;
+  sendQuestion(initialQuery);
+}, [initialQuery]);
 
   return (
     <div style={{
@@ -878,7 +1184,14 @@ function ChatScreen({ setScreen, initialQuery }) {
           </div>
           <div style={{ display: "flex", gap: 8 }}>
             <Btn variant="secondary" small icon={Bookmark}>Save Session</Btn>
-            <Btn variant="secondary" small icon={RefreshCw}>New Chat</Btn>
+            <Btn
+  variant="secondary"
+  small
+  icon={RefreshCw}
+  onClick={() => setMessages([])}
+>
+  New Chat
+</Btn>
           </div>
         </div>
 

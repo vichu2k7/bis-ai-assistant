@@ -1,53 +1,46 @@
-# BIS Sahayak AI 🇮🇳
+# 🇮🇳 BIS Sahayak AI
 
-> AI-powered, source-grounded assistant for navigating Bureau of Indian Standards (BIS) information.
+## AI-Powered Knowledge Assistant for the Bureau of Indian Standards
 
-## 📌 Overview
+BIS Sahayak AI is a domain-specific AI assistant designed to help citizens, manufacturers, MSMEs, students, and businesses access BIS-related information through a simple conversational interface.
 
-**BIS Sahayak AI** is an AI-powered knowledge assistant designed to help citizens, students, manufacturers, and businesses find information from official BIS documents more easily.
-
-Instead of manually searching through lengthy BIS documents, users can ask questions in natural language. The system retrieves relevant information from the BIS knowledge base and generates an answer using the retrieved official document context.
-
-The system follows a **Retrieval-Augmented Generation (RAG)** architecture to reduce unsupported answers and provide document-level source references.
+The system uses **Retrieval-Augmented Generation (RAG)** to retrieve relevant information from a curated BIS document knowledge base and generate grounded answers using a local Large Language Model.
 
 ---
 
-## 🎯 Problem
+## 🎯 Problem Statement
 
-BIS information is distributed across regulations, standards-related documents, certification guidelines, and other official resources.
+Finding information related to Indian Standards, certification, licensing, regulations, and BIS procedures can be difficult because users often need to search through lengthy and technical documents.
 
-Users may face difficulties such as:
+Users may need to:
 
-- Manually searching lengthy PDF documents
-- Finding the relevant section or information
-- Understanding technical BIS terminology
-- Identifying the correct certification or licensing procedure
-- Connecting a question with the relevant official document
+- Search through large PDF documents
+- Understand technical terminology
+- Find relevant sections and clauses
+- Identify certification requirements
+- Understand BIS licensing procedures
+- Cross-check information across documents
 
-BIS Sahayak AI aims to make this information easier to access through a simple conversational interface.
+Traditional keyword search may also fail when users describe their questions differently from the terminology used in official documents.
+
+BIS Sahayak AI addresses this problem through semantic retrieval and AI-powered question answering.
 
 ---
 
 ## 💡 Proposed Solution
 
-BIS Sahayak AI combines:
+BIS Sahayak AI allows users to ask questions about BIS information using natural language.
 
-- Natural-language question answering
-- Semantic document retrieval
-- Vector search
-- Retrieval-Augmented Generation
-- Local Large Language Model
-- Source/document references
-- A web-based user interface
+The system retrieves relevant information from BIS documents before generating the answer.
 
-### Basic Workflow
+### Core Workflow
 
 ```text
 User Question
       ↓
 Question Embedding
       ↓
-Semantic Retrieval
+Semantic Search
       ↓
 ChromaDB
       ↓
@@ -55,7 +48,7 @@ Relevant BIS Document Chunks
       ↓
 Context Construction
       ↓
-Llama 3.2
+Llama 3.2 3B
       ↓
 Grounded Answer
       ↓
