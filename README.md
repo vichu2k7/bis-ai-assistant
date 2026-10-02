@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # 🇮🇳 BIS Sahayak AI
 
 ## AI-Powered Knowledge Assistant for the Bureau of Indian Standards
@@ -56,6 +57,8 @@ Source References
 ```
 
 ---
+=======
+>>>>>>> 230e1223ea744f99663902af574275211f4d21fa
 
 ## 🧠 RAG Pipeline
 
@@ -166,6 +169,7 @@ The knowledge base currently contains **1,434 processed chunks across 9 BIS PDF 
                      ↓
           Source / Page References
                      ↓
+<<<<<<< HEAD
                  React UI
 ```
 
@@ -307,3 +311,6 @@ https://github.com/vichu2k7/bis-ai-assistant
 
 **YouTube Demo:**  
 https://youtu.be/AEbf1ZiBF_g?si=uy9gqqQH4BCyLo5G
+=======
+                React UI
+>>>>>>> 230e1223ea744f99663902af574275211f4d21fa
