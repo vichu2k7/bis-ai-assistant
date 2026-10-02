@@ -110,3 +110,49 @@ The knowledge base currently contains **1,434 processed chunks across 9 BIS PDF 
           Source / Page References
                      ↓
                 React UI
+
+🚀 Running the Project
+1. Clone the repository
+git clone https://github.com/vichu2k7/bis-ai-assistant.git
+cd bis-ai-assistant
+
+2. Install Python dependencies
+pip install -r requirements.txt
+
+3. Start Ollama
+Install Ollama and make sure the required model is available:
+ollama pull llama3.2:3b
+
+4. Start the backend
+python -m uvicorn backend.main:app --reload
+
+5. Start the frontend
+cd frontend
+npm install
+npm run dev
+
+The application will then be available through the Vite development server.
+🔐 Grounding & Safety
+BIS Sahayak AI is designed to reduce unsupported responses by grounding generation in retrieved BIS documents.
+If relevant information cannot be found in the available knowledge base, the system can indicate that the information is unavailable rather than intentionally generating an unsupported BIS answer.
+The current implementation is an MVP and should not be treated as a replacement for official BIS legal, regulatory, or certification guidance.
+⚠️ Current Limitations
+- The MVP uses a curated BIS document collection rather than the complete BIS knowledge ecosystem.
+- English conversational interaction is currently supported.
+- Production deployment would require stronger authentication, authorization, monitoring, encryption, and controlled document-update mechanisms.
+- The current knowledge base requires controlled re-ingestion when documents are updated.
+🔮 Future Scope
+The architecture can be extended with:
+- Automated BIS document monitoring
+- Document version control
+- Change detection and re-indexing
+- Role-based access control
+- Multilingual interaction
+- Expanded BIS knowledge sources
+- Clause-level citations
+- Secure production deployment
+- Knowledge-gap detection and official-source fallback
+🎥 Demo
+Demo Video: https://youtu.be/AEbf1ZiBF_g?si=uy9gqqQH4BCyLo5G
+GitHub Repository:
+https://github.com/vichu2k7/bis-ai-assistant
