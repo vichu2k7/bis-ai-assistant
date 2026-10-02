@@ -113,11 +113,37 @@ for raw_chunk in raw_chunks:
 
 
     # --------------------------------
+    # Year
+    # --------------------------------
+
+    year_line = lines[3].strip()
+
+    year = int(
+        year_line
+        .replace("YEAR:", "")
+        .strip()
+    )
+
+
+    # --------------------------------
+    # Type
+    # --------------------------------
+
+    type_line = lines[4].strip()
+
+    document_type = (
+        type_line
+        .replace("TYPE:", "")
+        .strip()
+    )
+
+
+    # --------------------------------
     # Document text
     # --------------------------------
 
     document = "\n".join(
-        lines[3:]
+        lines[5:]
     ).strip()
 
 
@@ -129,7 +155,12 @@ for raw_chunk in raw_chunks:
 
         "page": page,
 
+        "year": year,
+
+        "type": document_type,
+
         "text": document
+
     })
 
 
@@ -174,7 +205,11 @@ for chunk in chunks:
 
         "page": chunk["page"],
 
-        "chunk_id": chunk["chunk_id"]
+        "chunk_id": chunk["chunk_id"],
+
+        "year": chunk["year"],
+
+        "type": chunk["type"]
 
     })
 
@@ -211,5 +246,5 @@ print(
 )
 
 print(
-    "Source and page metadata stored successfully."
+    "Source, page, year and type metadata stored successfully."
 )

@@ -1,25 +1,9 @@
-
 import requests
 from rag.retrieve import retrieve
 
 
 # --------------------------------
-# 1. Load embedding model
-# --------------------------------
-
-print("Loading embedding model...")
-
-
-
-
-# --------------------------------
-# 2. Connect to ChromaDB
-# --------------------------------
-
-
-
-# --------------------------------
-# 4. Configuration
+# 1. Configuration
 # --------------------------------
 
 OLLAMA_URL = (
@@ -34,7 +18,7 @@ THRESHOLD = 1.30
 
 
 # --------------------------------
-# 5. RAG function
+# 2. RAG function
 # --------------------------------
 
 def ask_bis(question: str):
@@ -115,17 +99,25 @@ def ask_bis(question: str):
     # --------------------------------
 
     context_parts = []
-    
 
 
-    for i, document in enumerate(
-        relevant_documents,
+    for i, (document, item) in enumerate(
+        zip(
+            relevant_documents,
+            relevant_metadata
+        ),
         start=1
     ):
 
         context_parts.append(
             f"""
 --- BIS DOCUMENT {i} ---
+Source: {item.get("source", "Unknown")}
+Page: {item.get("page", "Unknown")}
+Year: {item.get("year", "Unknown")}
+Document Type: {item.get("type", "Unknown")}
+
+Content:
 {document}
 """
         )
@@ -143,8 +135,7 @@ def ask_bis(question: str):
     prompt = f"""
 You are BIS Sahayak AI.
 
-You answer questions using ONLY
-the provided BIS document context.
+You answer questions using ONLY the provided BIS document context.
 
 STRICT RULES:
 
@@ -154,18 +145,32 @@ STRICT RULES:
 
 3. Do NOT guess or invent information.
 
-4. If the answer is not present in the
-provided context, respond exactly:
+4. Pay attention to the Year and Document Type
+metadata provided for every document.
+
+5. When the user asks for the latest, current,
+newest, recent, or updated information:
+
+   - Compare the years of the relevant documents.
+   - Prefer the most recent relevant document.
+   - Do NOT describe an older document as the latest
+     when a newer relevant document is present.
+   - If the documents are amendments or corrigenda,
+     describe them as amendments or corrigenda rather
+     than incorrectly calling them a new regulation.
+
+6. If the available context does not provide enough
+information to determine the answer, respond exactly:
 
 I could not find this information in the available BIS documents.
 
-5. Give a clear and concise answer.
+7. Give a clear and concise answer.
 
-6. Answer only what the user asked.
+8. Answer only what the user asked.
 
-7. Do not mention unrelated information.
+9. Do not mention unrelated information.
 
-8. Do not refer to yourself as a language model.
+10. Do not refer to yourself as a language model.
 
 BIS DOCUMENT CONTEXT:
 
@@ -290,8 +295,6 @@ ANSWER:
             chunk_id
         )
 
-
-        # Avoid duplicate sources
 
         if source_key in seen_sources:
 

@@ -25,7 +25,60 @@ CHUNK_OVERLAP = 150
 
 
 # --------------------------------
-# 3. Create output directory
+# 3. Document metadata
+# --------------------------------
+
+DOCUMENT_METADATA = {
+
+    "BIS-ACT-2016.pdf": {
+        "year": 2016,
+        "type": "BIS Act"
+    },
+
+    "BIS-Rules-2018_amendments_Sep_15102020.pdf": {
+        "year": 2018,
+        "type": "BIS Rules"
+    },
+
+    "BIS_CA_12032019.pdf": {
+        "year": 2018,
+        "type": "Conformity Assessment Regulations"
+    },
+
+    "BIS_ROD_Order_12092019.pdf": {
+        "year": 2019,
+        "type": "Removal of Difficulty Order"
+    },
+
+    "Gazette-Notification-1.pdf": {
+        "year": 2026,
+        "type": "Conformity Assessment Amendment"
+    },
+
+    "Gazette-Notification-28.04.26.pdf": {
+        "year": 2026,
+        "type": "Conformity Assessment Corrigendum"
+    },
+
+    "Gazette-Notification-of-Hallmarking-Published.pdf": {
+        "year": 2026,
+        "type": "Hallmarking Amendment"
+    },
+
+    "Gazette-Notification-Published-amendment-to-regulation-conformity-assesment.pdf": {
+        "year": 2024,
+        "type": "Conformity Assessment Regulation"
+    },
+
+    "GrantofLicence-Guidelines-25Feb2026.pdf": {
+        "year": 2026,
+        "type": "Grant of Licence Guidelines"
+    }
+}
+
+
+# --------------------------------
+# 4. Create output directory
 # --------------------------------
 
 output_path.parent.mkdir(
@@ -35,28 +88,29 @@ output_path.parent.mkdir(
 
 
 # --------------------------------
-# 4. Clean extracted PDF text
+# 5. Clean extracted PDF text
 # --------------------------------
 
 def clean_text(text):
 
-    # Remove unusual zero-width characters
     text = text.replace("\u200b", " ")
     text = text.replace("\u200c", " ")
     text = text.replace("\u200d", " ")
     text = text.replace("\ufeff", " ")
 
-    # Fix repeated whitespace
     text = re.sub(r"\s+", " ", text)
 
-    # Remove spaces before punctuation
-    text = re.sub(r"\s+([,.!?;:])", r"\1", text)
+    text = re.sub(
+        r"\s+([,.!?;:])",
+        r"\1",
+        text
+    )
 
     return text.strip()
 
 
 # --------------------------------
-# 5. Prepare chunks
+# 6. Prepare chunks
 # --------------------------------
 
 chunks = []
@@ -65,7 +119,7 @@ chunk_number = 0
 
 
 # --------------------------------
-# 6. Process each PDF
+# 7. Process each PDF
 # --------------------------------
 
 for pdf_path in pdf_files:
@@ -74,12 +128,23 @@ for pdf_path in pdf_files:
 
     doc = fitz.open(pdf_path)
 
+    metadata = DOCUMENT_METADATA.get(
+        pdf_path.name,
+        {
+            "year": 0,
+            "type": "Unknown"
+        }
+    )
+
 
     # --------------------------------
-    # 7. Process each page
+    # 8. Process each page
     # --------------------------------
 
-    for page_number, page in enumerate(doc, start=1):
+    for page_number, page in enumerate(
+        doc,
+        start=1
+    ):
 
         text = page.get_text()
 
@@ -90,14 +155,13 @@ for pdf_path in pdf_files:
 
 
         # --------------------------------
-        # 8. Split page into sentences
+        # 9. Split page into sentences
         # --------------------------------
 
         sentences = re.split(
             r"(?<=[.!?])\s+",
             text
         )
-
 
         current_chunk = ""
 
@@ -115,12 +179,13 @@ for pdf_path in pdf_files:
             # --------------------------------
 
             if (
-                len(current_chunk) + len(sentence) + 1
+                len(current_chunk)
+                + len(sentence)
+                + 1
                 <= CHUNK_SIZE
             ):
 
                 if current_chunk:
-
                     current_chunk += " "
 
                 current_chunk += sentence
@@ -129,15 +194,30 @@ for pdf_path in pdf_files:
             else:
 
                 # Save current chunk
+
                 if current_chunk:
 
                     chunk_number += 1
 
                     chunks.append({
-                        "chunk_id": f"chunk_{chunk_number}",
-                        "source": pdf_path.name,
-                        "page": page_number,
-                        "text": current_chunk
+
+                        "chunk_id":
+                            f"chunk_{chunk_number}",
+
+                        "source":
+                            pdf_path.name,
+
+                        "page":
+                            page_number,
+
+                        "year":
+                            metadata["year"],
+
+                        "type":
+                            metadata["type"],
+
+                        "text":
+                            current_chunk
                     })
 
 
@@ -150,7 +230,9 @@ for pdf_path in pdf_files:
                 ]
 
                 current_chunk = (
-                    overlap_text + " " + sentence
+                    overlap_text
+                    + " "
+                    + sentence
                 ).strip()
 
 
@@ -163,22 +245,36 @@ for pdf_path in pdf_files:
             chunk_number += 1
 
             chunks.append({
-                "chunk_id": f"chunk_{chunk_number}",
-                "source": pdf_path.name,
-                "page": page_number,
-                "text": current_chunk
+
+                "chunk_id":
+                    f"chunk_{chunk_number}",
+
+                "source":
+                    pdf_path.name,
+
+                "page":
+                    page_number,
+
+                "year":
+                    metadata["year"],
+
+                "type":
+                    metadata["type"],
+
+                "text":
+                    current_chunk
             })
 
 
     # --------------------------------
-    # Close current PDF
+    # Close PDF
     # --------------------------------
 
     doc.close()
 
 
 # --------------------------------
-# 9. Save chunks
+# 10. Save chunks
 # --------------------------------
 
 with output_path.open(
@@ -201,6 +297,14 @@ with output_path.open(
         )
 
         f.write(
+            f"YEAR: {chunk['year']}\n"
+        )
+
+        f.write(
+            f"TYPE: {chunk['type']}\n"
+        )
+
+        f.write(
             chunk["text"]
         )
 
@@ -208,7 +312,7 @@ with output_path.open(
 
 
 # --------------------------------
-# 10. Result
+# 11. Result
 # --------------------------------
 
 print("\nChunking completed!")
