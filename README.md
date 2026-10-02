@@ -1,55 +1,112 @@
-# 🇮🇳 BIS Sahayak AI
+---
 
-## AI-Powered Knowledge Assistant for the Bureau of Indian Standards
+## 🧠 RAG Pipeline
 
-BIS Sahayak AI is a domain-specific AI assistant designed to help citizens, manufacturers, MSMEs, students, and businesses access BIS-related information through a simple conversational interface.
+BIS Sahayak AI follows a Retrieval-Augmented Generation architecture:
 
-The system uses **Retrieval-Augmented Generation (RAG)** to retrieve relevant information from a curated BIS document knowledge base and generate grounded answers using a local Large Language Model.
+1. **Document Processing**  
+   BIS PDF documents are collected and processed using PyMuPDF.
+
+2. **Text Chunking**  
+   Documents are divided into smaller overlapping chunks for efficient retrieval.
+
+3. **Embedding Generation**  
+   Each chunk is converted into a vector representation using Sentence Transformers.
+
+4. **Vector Storage**  
+   Embeddings are stored in ChromaDB along with document metadata such as source, page, year, and document type.
+
+5. **Semantic Retrieval**  
+   When a user asks a question, the question is converted into an embedding and relevant BIS chunks are retrieved using semantic similarity.
+
+6. **Context Construction**  
+   The retrieved information is combined into a context for the language model.
+
+7. **Grounded Generation**  
+   Llama 3.2 3B generates an answer using the retrieved BIS context.
+
+8. **Source Traceability**  
+   The system returns relevant document and page references along with the answer.
 
 ---
 
-## 🎯 Problem Statement
+## 🛠️ Technology Stack
 
-Finding information related to Indian Standards, certification, licensing, regulations, and BIS procedures can be difficult because users often need to search through lengthy and technical documents.
-
-Users may need to:
-
-- Search through large PDF documents
-- Understand technical terminology
-- Find relevant sections and clauses
-- Identify certification requirements
-- Understand BIS licensing procedures
-- Cross-check information across documents
-
-Traditional keyword search may also fail when users describe their questions differently from the terminology used in official documents.
-
-BIS Sahayak AI addresses this problem through semantic retrieval and AI-powered question answering.
+| Component | Technology |
+|---|---|
+| Frontend | React + Vite |
+| Backend | FastAPI |
+| RAG | Retrieval-Augmented Generation |
+| Embeddings | Sentence Transformers (`all-MiniLM-L6-v2`) |
+| Vector Database | ChromaDB |
+| LLM | Llama 3.2 3B |
+| Local LLM Runtime | Ollama |
+| PDF Processing | PyMuPDF |
+| Language | Python, JavaScript |
+| Version Control | Git + GitHub |
 
 ---
 
-## 💡 Proposed Solution
+## 📚 Knowledge Base
 
-BIS Sahayak AI allows users to ask questions about BIS information using natural language.
+The MVP uses a curated collection of official BIS documents covering areas such as:
 
-The system retrieves relevant information from BIS documents before generating the answer.
+- BIS Act
+- BIS Rules
+- Conformity Assessment Regulations
+- Conformity Assessment amendments and corrigenda
+- Removal of Difficulty Order
+- Hallmarking-related regulations
+- Grant of Licence Guidelines
 
-### Core Workflow
+The knowledge base currently contains **1,434 processed chunks across 9 BIS PDF documents**.
+
+---
+
+## ✨ Key Features
+
+- 💬 Natural-language BIS question answering
+- 🔎 Semantic document retrieval
+- 📚 BIS-focused knowledge base
+- 🧠 Retrieval-Augmented Generation
+- 📄 Source and page references
+- 📅 Document year and type metadata
+- 🛡️ Grounded responses based on retrieved BIS content
+- 🚫 Fallback when information is unavailable in the knowledge base
+- ⚡ Local LLM inference using Ollama
+
+---
+
+## 🏗️ System Architecture
 
 ```text
-User Question
-      ↓
-Question Embedding
-      ↓
-Semantic Search
-      ↓
-ChromaDB
-      ↓
-Relevant BIS Document Chunks
-      ↓
-Context Construction
-      ↓
-Llama 3.2 3B
-      ↓
-Grounded Answer
-      ↓
-Source References
+                BIS Documents
+                     ↓
+              PDF Processing
+                     ↓
+                 Chunking
+                     ↓
+          Sentence Transformers
+                     ↓
+                Embeddings
+                     ↓
+                 ChromaDB
+                     ↑
+                     │
+              User Question
+                     ↓
+             Query Embedding
+                     ↓
+            Semantic Retrieval
+                     ↓
+          Relevant BIS Chunks
+                     ↓
+             Context Builder
+                     ↓
+              Llama 3.2 3B
+                     ↓
+            Grounded Response
+                     ↓
+          Source / Page References
+                     ↓
+                React UI
